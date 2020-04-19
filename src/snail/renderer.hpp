@@ -144,11 +144,6 @@ public:
         const Color& text_color = palette::white,
         const Color& shadow_color = palette::black,
         double scale = 1.0);
-    Rect render_multiline_text(
-        const std::string& text,
-        int x,
-        int y,
-        const Color& text_color = palette::black);
     Size calculate_text_size(const std::string& text);
     void render_line(int start_x, int start_y, int end_x, int end_y);
     void render_image(Image& image, int dst_x, int dst_y);

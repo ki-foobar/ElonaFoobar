@@ -82,12 +82,6 @@ Rect Renderer::render_text_with_shadow(
 }
 
 
-Rect Renderer::render_multiline_text(const std::string&, int, int, const Color&)
-{
-    return Rect{0, 0, 0, 0};
-}
-
-
 Size Renderer::calculate_text_size(const std::string&)
 {
     return {0, 0};

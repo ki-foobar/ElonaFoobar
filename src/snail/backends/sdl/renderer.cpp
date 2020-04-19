@@ -7,6 +7,7 @@
 #include "../../surface.hpp"
 
 
+
 namespace elona
 {
 namespace snail
@@ -15,61 +16,32 @@ namespace snail
 namespace
 {
 
-template <typename F>
-Rect _render_text_base(
-    F draw,
-    const std::string& text,
-    int x,
-    int y,
-    const Color& color,
-    double scale,
-    bool blended_text_rendering,
-    Font& font,
-    Renderer::TextAlignment text_alignment,
-    Renderer::TextBaseline text_baseline,
-    ::SDL_Renderer* ptr)
+constexpr ::FC_AlignEnum convert_text_alignment(
+    Renderer::TextAlignment text_alignment) noexcept
 {
-    if (text.empty())
-        return Rect{x, y, 0, 0};
-
-    auto render_func = blended_text_rendering ? &::TTF_RenderUTF8_Blended
-                                              : &::TTF_RenderUTF8_Solid;
-
-    auto surface = detail::enforce_ttf(
-        render_func(font.ptr(), text.c_str(), detail::to_sdl_color(color)));
-    auto texture =
-        detail::enforce_sdl(::SDL_CreateTextureFromSurface(ptr, surface));
-    detail::enforce_sdl(::SDL_SetTextureAlphaMod(texture, color.a));
-
-    int x_;
-    int y_;
-    int width = static_cast<int>(static_cast<double>(surface->w) * scale);
-    int height = static_cast<int>(static_cast<double>(surface->h) * scale);
-
     switch (text_alignment)
     {
-    case Renderer::TextAlignment::left: x_ = x; break;
-    case Renderer::TextAlignment::center: x_ = x - width / 2; break;
-    case Renderer::TextAlignment::right: x_ = x - width; break;
+    case Renderer::TextAlignment::left: return ::FC_ALIGN_LEFT;
+    case Renderer::TextAlignment::center: return ::FC_ALIGN_CENTER;
+    case Renderer::TextAlignment::right: return ::FC_ALIGN_RIGHT;
+    default: return ::FC_ALIGN_LEFT;
     }
-    switch (text_baseline)
-    {
-    case Renderer::TextBaseline::top: y_ = y; break;
-    case Renderer::TextBaseline::middle: y_ = y - height / 2; break;
-    case Renderer::TextBaseline::bottom: y_ = y - height; break;
-    }
-    ::SDL_Rect dst{x_, y_, width, height};
-    draw(texture, dst);
+}
 
-    ::SDL_FreeSurface(surface);
-    ::SDL_DestroyTexture(texture);
 
-    return Rect{x_, y_, width, height};
+
+constexpr ::FC_FilterEnum convert_text_blending(bool blended_text_rendering)
+{
+    return blended_text_rendering ? ::FC_FILTER_NEAREST : ::FC_FILTER_LINEAR;
 }
 
 } // namespace
 
+
+
 SDL_Renderer* _ptr;
+
+
 
 void Renderer::set_blend_mode(BlendMode blend_mode)
 {
@@ -151,6 +123,7 @@ void Renderer::fill_rect(int x, int y, int width, int height)
 }
 
 
+
 Rect Renderer::render_text(
     const std::string& text,
     int x,
@@ -158,21 +131,35 @@ Rect Renderer::render_text(
     const Color& color,
     double scale)
 {
-    return _render_text_base(
-        [this](const auto& texture, const auto& dst) {
-            detail::enforce_sdl(
-                ::SDL_RenderCopy(ptr(), texture, nullptr, &dst));
-        },
-        text,
+    if (text.empty())
+        return Rect{x, y, 0, 0};
+
+    ::FC_SetFilterMode(
+        _font.ptr(), convert_text_blending(_blended_text_rendering));
+
+    if (_text_baseline == TextBaseline::bottom)
+    {
+        y -= 25; // TODO: Add support for baseline to SDL_FontCache
+    }
+    else if (_text_baseline == TextBaseline::middle)
+    {
+        y -= 25 / 2; // TODO: Add support for baseline to SDL_FontCache
+    }
+
+    // TODO: Add support for drawing raw string to SDL_FontCache
+    const auto r = ::FC_DrawEffect(
+        _font.ptr(),
+        ptr(),
         x,
         y,
-        color,
-        scale,
-        _blended_text_rendering,
-        _font,
-        _text_alignment,
-        _text_baseline,
-        ptr());
+        ::FC_MakeEffect(
+            convert_text_alignment(_text_alignment),
+            ::FC_MakeScale(
+                static_cast<float>(scale), static_cast<float>(scale)),
+            detail::to_sdl_color(color)),
+        "%s",
+        text.c_str());
+    return {r.x, r.y, r.w, r.h};
 }
 
 
@@ -185,72 +172,29 @@ Rect Renderer::render_text_with_shadow(
     const Color& shadow_color,
     double scale)
 {
-    // Render shadow. The created texture is reused in each loop.
-    _render_text_base(
-        [this](const auto& texture, const auto& dst) {
-            for (int dy : {-1, 0, 1})
-            {
-                for (int dx : {-1, 0, 1})
-                {
-                    if (dx == 0 && dy == 0)
-                        continue;
+    for (int dy : {-1, 0, 1})
+    {
+        for (int dx : {-1, 0, 1})
+        {
+            if (dx == 0 && dy == 0)
+                continue;
 
-                    auto dst_ = dst;
-                    dst_.x += dx;
-                    dst_.y += dy;
-                    detail::enforce_sdl(
-                        ::SDL_RenderCopy(ptr(), texture, nullptr, &dst_));
-                }
-            }
-        },
-        text,
-        x,
-        y,
-        shadow_color,
-        scale,
-        _blended_text_rendering,
-        _font,
-        _text_alignment,
-        _text_baseline,
-        ptr());
-
+            // Render shadow.
+            render_text(text, x + dx, y + dy, shadow_color, scale);
+        }
+    }
     // Render text.
     return render_text(text, x, y, text_color, scale);
 }
 
 
-Rect Renderer::render_multiline_text(
-    const std::string& text,
-    int x,
-    int y,
-    const Color& text_color)
-{
-    const auto line_skip = ::TTF_FontLineSkip(_font.ptr());
-
-    Rect ret = {x, y, 0, 0};
-    auto i = 0;
-    std::istringstream stream{text};
-    std::string line;
-    while (std::getline(stream, line))
-    {
-        const auto r = render_text(line, x, y + line_skip * i, text_color);
-        ret.x = std::max(ret.x, r.x);
-        ret.width = std::max(ret.width, r.width);
-        ret.height += r.height;
-        ++i;
-    }
-
-    return ret;
-}
-
 
 Size Renderer::calculate_text_size(const std::string& text)
 {
-    int width;
-    int height;
-    detail::enforce_ttf(
-        ::TTF_SizeUTF8(_font.ptr(), text.c_str(), &width, &height));
-    return {width, height};
+    // TODO: Add support for drawing raw string to SDL_FontCache
+    const auto width = ::FC_GetWidth(_font.ptr(), "%s", text.c_str());
+    const auto height = ::FC_GetHeight(_font.ptr(), "%s", text.c_str());
+    return {static_cast<int>(width), static_cast<int>(height)};
 }
 
 

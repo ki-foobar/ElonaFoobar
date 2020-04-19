@@ -18,6 +18,8 @@ set(SNAIL_SOURCES
   input.cpp
   surface.cpp
 
+  SDL_FontCache/SDL_FontCache.c
+
   backends/${SNAIL_DIR}/application.cpp
   backends/${SNAIL_DIR}/audio.cpp
   backends/${SNAIL_DIR}/detail.cpp

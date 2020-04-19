@@ -3,7 +3,8 @@
 #include <tuple>
 #include <unordered_map>
 
-#include "../elona/filesystem.hpp"
+#include "application.hpp"
+
 
 
 namespace elona
@@ -11,22 +12,20 @@ namespace elona
 namespace snail
 {
 
-
-
 Font::Font(const fs::path& filepath, int size, Style style)
     : _filepath(filepath)
     , _size(size)
     , _style(style)
-    , _ptr(
-          detail::enforce_ttf(::TTF_OpenFont(
-              filepathutil::to_utf8_path(filepath).c_str(),
-              size)),
-          ::TTF_CloseFont)
+    , _ptr(::FC_CreateFont(), ::FC_FreeFont)
 {
-    ::TTF_SetFontStyle(ptr(), static_cast<int>(style));
+    ::FC_LoadFont(
+        _ptr.get(),
+        Application::instance().get_renderer().ptr(),
+        filepathutil::to_utf8_path(filepath).c_str(),
+        size,
+        ::FC_MakeColor(0, 0, 0, 255),
+        static_cast<int>(style));
 }
-
-
 
 } // namespace snail
 } // namespace elona

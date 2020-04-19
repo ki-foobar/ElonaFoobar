@@ -131,4 +131,5 @@ For files under [runtime/graphic](runtime/graphic/) folder of the repository, se
 * [zstr](https://github.com/mateidavid/zstr): see [license file](src/thirdparty/zstr/LICENSE).
 * [minizip](https://github.com/mnoinvaz/minizip): see [license file](src/thirdparty/minizip/LICENSE).
 * [json5](https://github.com/ki-foobar/json5): see [license file](src/thirdparty/json5/LICENSE).
+* [SDL_FontCache](https://github.com/grimfang4/SDL_FontCache): see [license file](src/snail/SDL_FontCache/LICENSE).
 * [inspect.lua](https://github.com/kikito/inspect.lua): see [license file](runtime/data/script/prelude/inspect.lua).

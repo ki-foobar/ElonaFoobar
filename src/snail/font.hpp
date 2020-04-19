@@ -4,6 +4,7 @@
 #include <string>
 
 #include "../util/enumutil.hpp"
+#include "SDL_FontCache/SDL_FontCache.h"
 #include "detail/sdl.hpp"
 #include "filesystem.hpp"
 
@@ -45,7 +46,7 @@ struct Font
     }
 
 
-    ::TTF_Font* ptr() noexcept
+    ::FC_Font* ptr() noexcept
     {
         return _ptr.get();
     }
@@ -66,7 +67,7 @@ private:
     fs::path _filepath;
     int _size;
     Style _style;
-    std::shared_ptr<::TTF_Font> _ptr;
+    std::shared_ptr<::FC_Font> _ptr;
 };
 
 
