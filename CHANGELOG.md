@@ -41,7 +41,7 @@
 
 ### Fixed
 
-* Fix crash when drawing a figurine of tinted monster, e.g., a figurine of red putit, Goda, etc.
+- Fix crash when drawing a figurine of tinted monster, e.g., a figurine of red putit, Goda, etc.
 
 
 
@@ -49,50 +49,50 @@
 
 ### Fixed
 
-* [vanilla] Fix a position in the log window where this message is displayed: "You want to watch this event again?"
-* [vanilla] Fix no-kill win in the arena or the pet arena.
-  * In a town arena, you win battle in about 5% even if you didn't kill any monsters. It also happens in a pet arena.
-* [vanilla] Fix issue where The Oracle records unexpected items.
-  * When you wish "card" or "figure" of someone, unique artifacts the character usually has were recorded in The Oracle. For example, wishing "card mani" or "figure mani" appended "cat's tail" to The Oracle.
-* Fix flickering in house design mode.
-* Fix player's targeting routine when `core.auto_target` option is on.
-* Fix golem's getting dimmed.
-* Fix issues (including potential crashes) related to our internal system.
-* Fix some routines related to damage by player's spells or rods.
-* Fix the number of the items that rogue boss, \<The leopard warrior\> or \<Silvia\> drop.
-* Fix typos.
+- [vanilla] Fix a position in the log window where this message is displayed: "You want to watch this event again?"
+- [vanilla] Fix no-kill win in the arena or the pet arena.
+ - In a town arena, you win battle in about 5% even if you didn't kill any monsters. It also happens in a pet arena.
+- [vanilla] Fix issue where The Oracle records unexpected items.
+ - When you wish "card" or "figure" of someone, unique artifacts the character usually has were recorded in The Oracle. For example, wishing "card mani" or "figure mani" appended "cat's tail" to The Oracle.
+- Fix flickering in house design mode.
+- Fix player's targeting routine when `core.auto_target` option is on.
+- Fix golem's getting dimmed.
+- Fix issues (including potential crashes) related to our internal system.
+- Fix some routines related to damage by player's spells or rods.
+- Fix the number of the items that rogue boss, \<The leopard warrior\> or \<Silvia\> drop.
+- Fix typos.
 
 
 ### Added
 
-* Add "Hang" option to `i` nteract menu to hang arbitrary NPCs. It is available only in Wizard mode.
-* Improve performance in drawing character chips.
-* Make it possible to assign shortcut to use cargo items.
-  * You cannot use cargo items in Nefias and some other locations, as you cannot do so before.
-* Add information to the save selection menu.
-  * When you save an old save data in this version or newer, a new file, `header.json`, will be created. If a save has the file, its information is displayed in the save selection menu.
-* Improve character shadow's rendering.
-* [mod] Allow mods without `init.lua`.
+- Add "Hang" option to `i` nteract menu to hang arbitrary NPCs. It is available only in Wizard mode.
+- Improve performance in drawing character chips.
+- Make it possible to assign shortcut to use cargo items.
+ - You cannot use cargo items in Nefias and some other locations, as you cannot do so before.
+- Add information to the save selection menu.
+ - When you save an old save data in this version or newer, a new file, `header.json`, will be created. If a save has the file, its information is displayed in the save selection menu.
+- Improve character shadow's rendering.
+- [mod] Allow mods without `init.lua`.
 
 
 ### Changed
 
-* Change inventory menu of "Steal" a bit.
-  * When you try to steal items on the ground, in vanilla and old foobar, player's money is shown in the menu. As it is useless information, hide it since this version.
-* Change the naming rule of the save folders.
-  * Note that old save folders will not be renamed and you do not have to rename them.
-  * As a side-effect, you can choose any name you like without worrying whether the name is already used or not.
-* Remove unused parts of `.map` files. This change reduces file size 90% in average.
-* Change the internal representation of map items. Due to this, the number of items whih can be stacked at one tile increases from 3 to 4. Also, a bag icon comes to mean "5 or more items stacked here"; 2 bags, "10 or more"; 3 bags, "15 or more"; 4 bags, "20 or more"
-* Remove unnecessary save files, `mod_inv*` and `mod_cdata*`.
-* [mod] Simplify definition of localization text associated with data instances.
-* [mod] Move definition of blending recipe to Lua side.
-* [mod] Move definition of god offerings to Lua side.
+- Change inventory menu of "Steal" a bit.
+ - When you try to steal items on the ground, in vanilla and old foobar, player's money is shown in the menu. As it is useless information, hide it since this version.
+- Change the naming rule of the save folders.
+ - Note that old save folders will not be renamed and you do not have to rename them.
+ - As a side-effect, you can choose any name you like without worrying whether the name is already used or not.
+- Remove unused parts of `.map` files. This change reduces file size 90% in average.
+- Change the internal representation of map items. Due to this, the number of items whih can be stacked at one tile increases from 3 to 4. Also, a bag icon comes to mean "5 or more items stacked here"; 2 bags, "10 or more"; 3 bags, "15 or more"; 4 bags, "20 or more"
+- Remove unnecessary save files, `mod_inv*` and `mod_cdata*`.
+- [mod] Simplify definition of localization text associated with data instances.
+- [mod] Move definition of blending recipe to Lua side.
+- [mod] Move definition of god offerings to Lua side.
 
 
 ### Removed
 
-* Remove "Toggle Console" action, which shows or hides the in-game console window.
+- Remove "Toggle Console" action, which shows or hides the in-game console window.
 
 
 
@@ -100,10 +100,10 @@
 
 ### Fixed
 
-* Fix crash related to internal item management system.
-  * It is a workaround: it prevents the crash, but item names in some game messages are replaced with "something". The bug will be fully fixed in the next version.
-* Fix issue where a box or chest does not open when you fail to unlock it once and successfully unlock for the second time.
-* Fix crash when you try unlocking many times.
+- Fix crash related to internal item management system.
+ - It is a workaround: it prevents the crash, but item names in some game messages are replaced with "something". The bug will be fully fixed in the next version.
+- Fix issue where a box or chest does not open when you fail to unlock it once and successfully unlock for the second time.
+- Fix crash when you try unlocking many times.
 
 
 
@@ -111,29 +111,29 @@
 
 ### Fixed
 
-* Fix adventurer's favorite skill.
-* Fix translation errors in blending recipe and more.
-* Fix not being able to auto-pick foods.
-* Fix that you may lose blending materials even on success.
-* Fix text rendering in the log window.
-* Fix some of Japanese text being cut in the middle.
-* Improve digital clock's look on the top left.
-* Fix typos.
+- Fix adventurer's favorite skill.
+- Fix translation errors in blending recipe and more.
+- Fix not being able to auto-pick foods.
+- Fix that you may lose blending materials even on success.
+- Fix text rendering in the log window.
+- Fix some of Japanese text being cut in the middle.
+- Improve digital clock's look on the top left.
+- Fix typos.
 
 
 ### Added
 
-* Add new options to configure sound/music volume (0-8). By default, 8 (maximum).
-* Add new console commands.
-  * `:wish`
-  * `:gain_spell`
-  * `:gain_exp`
-  * `:gain_fame`
+- Add new options to configure sound/music volume (0-8). By default, 8 (maximum).
+- Add new console commands.
+ - `:wish`
+ - `:gain_spell`
+ - `:gain_exp`
+ - `:gain_fame`
 
 
 ### Changed
 
-* Re-design in-game console feature.
+- Re-design in-game console feature.
 
 
 ## [0.7.0] - 2020-03-22
@@ -421,7 +421,7 @@ Windows only release
 - Implement profile feature.
   - Add `profile` folder.
   - Move the save folder to `profile/<profile name>/save` to make it possible to separate save folders for each profile.
-  - Mvoe the configuration file to `profile/<profile name>/config.hcl` to allow you to customize options for each profile.
+  - Move the configuration file to `profile/<profile name>/config.hcl` to allow you to customize options for each profile.
 - Implement asset system to allow mods to change the location of asset files.
 - Add ability to create own configurations for mods.
 - Implement dialog system based on Lua scripting. Almost all of the unique dialogs have already been replaced with the new system.

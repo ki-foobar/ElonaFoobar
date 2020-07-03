@@ -1,0 +1,251 @@
+# Elona foobar
+
+This document is in progress, the contents may include mistakes.
+
+
+
+## Fixes for vanilla's bugs
+
+- Fix known issues since vanilla in Elona Bugfix wiki.
+  - Too many...
+- Fix freeze when failing to create rewards at casino.
+- Fix employees' vanishing when building your home.
+- Fix not being able to leave the cave if you die in the cave without leaving there.
+- Fix infinite loop when entering map filled with doors or walls.
+- Fix you cannot talk to your pet unique NPC like god's servant.
+- Fix PC dying in main scenario in a certain condition.
+- Fix the lords of Chaos Castles not dropping rod of wishing.
+- Fix Y position of recipe window when the Elona window size is other than 800x600.
+- Fix overflow of harvest quest's reward.
+- Fix crash when you eat an equipment which maintains your luck.
+  - Newly add Luck Growth buff to avoid it.
+- Fix overflow of gold and platinum.
+- Do not keep keys pressed during cards are dealt at casino.
+- Fix glitch of drawing bottom left of small map if the window size is large enough.
+- Fix shelter stacking when you build it on another shelter.
+- Move the position of the crypt of the damned in the global map right. The previous one was on the cliff, which was of course invalid, so that the crypt might be placed at different position in each save and rarely "moves" every time diastrophism occurs.
+- Replace ellipsis symbols with 3 periods in English text because some English fonts do not have the glyph.
+- Fix the progress of ether disease advancing over the upper limit.
+- Fix food not getting rotten sometimes if you believe in Kumiromi.
+- Fix item chip of chain mail stacking on too high position.
+- Remove strange spacing in the message log window when the weather changes.
+- Remove garbage displayed around selection keys.
+- Fix item chip of double bed and happy bed being cut off.
+- Fix aspect ratio of PCC in change appearance menu.
+- Do not show message "something falls down" if the item is on the ground.
+- Fix 3 continent border maps being regarded as indoor.
+- Fix strange subcategories of 3 items.
+  - Strawberry: others -> fruits
+  - Hero cheese: fruits -> others
+  - Rabbit tail: fruits -> others
+- Fix flickering when you move your cursor to the top left tile in house designing.
+- Align resistance's text vertically in item list menus even if the font is propotional.
+- Fix `{sex}` tag being always substituted by "boy" regardless your PC's sex.
+- Fix being unable to run in a certain configuration: scoll = Yes / scroll when running = No / running wait = 3 wait
+- Change the time when the story begins: 01:10 -> 16:10
+  - See [these tweet](https://twitter.com/ki_foobar/status/1105046955556724736) for details (in Japanese).
+- Fix that stacked wells dried out at the same time.
+- Fix that Moyer says his line even if he is dead.
+- Fix one Easter Egg not working.
+- Fix stack height and offset Y of simple rack's item chip.
+- Fix that you cannot go back from detail submenu to change appearance menu by pressing ESC.
+- Fix wield message log "You see ." in global map.
+- Fix wield behavior when you present gift.
+  - When you give present to NPC or to ally, your burden state won't be refreshed.
+  - When you give present to NPC, the game turn does not pass unlike other items.
+  - When you give present to ally, you cannot give other items continuously.
+  - After you give present to ally, `x`, opening inventory menu most recently used, shows the ally's `G`ive menu.
+- Fix shadow rendering of player's sight. Some shadows did not connect with each other.
+- Fix "duplicate map exit bug".
+  - Bug: if you leave a quest map at the exact turn when time is up, you will go to the world map.
+- Fix that some game events might cause "time reversal".
+  - Some events such as God inside Ehekatl, marriage, reunion with pets are processed in somewhat wield way in vanilla. The most recently triggered event was processed first, but it should be last.
+- Fix issue where The Oracle records unexpected items.
+ - When you wish "card" or "figure" of someone, unique artifacts the character usually has were recorded in The Oracle. For example, wishing "card mani" or "figure mani" appended "cat's tail" to The Oracle.
+- Fix no-kill win in the arena or the pet arena.
+ - In a town arena, you win battle in about 5% even if you didn't kill any monsters. It also happens in a pet arena.
+- Fix a position in the log window where this message is displayed: "You want to watch this event again?"
+
+
+
+## New features
+
+- Minimum attribute roll in character making.
+- Abolish upper limit of number of NPC's actions(10 -> unlimited).
+- Quick save and quick load.
+- Exchange position pressing Shift key.
+- Always show HP bars.
+- Highlight positions of upstairs/downstairs.
+- Autodig.
+- Do not ask direction to close if there is only one door around you.
+- Custom class.
+- Custom race.
+- Use JSON file for configuration.
+- Externalize part of text to Lua scripts.
+- Externalize part of data to Lua scripts.
+- Introduce Lua.
+- Implement autopick(experimental).
+- Implement damage popup(experimental).
+- Show pets' HP bars like omake.
+- Show leash icon next to pet's HP bar if leashed.
+- Implement autodig mode(compatible with oomEx).
+- Disable autosave.
+  - You can enable autosave again from option menu.
+- You can change how frequently shopkeepers restock their items.
+  - 0-10 days(default: 3 days). If you set 0, sold items are updated every time you talk to the shopkeeper.
+- You can now change some options in game.
+  - Extra Race/Class
+  - Animation Wait/Alert Wait
+  - Initial Key Wait/Key Wait
+- Decrease animation wait depending on `animewait` setting.
+- Add unique portrait for some NPCs.
+- Add resolution switching options/fullscreen.
+- Increase rate of potion of cure corruption at casino.
+  - Same as omake.
+- You can now cancel the final name input box in character making.
+- Possible to go back the portrait menu at the final character making phase.
+- Selected alias is restored when you go back the alias rolling menu.
+- Implement alias lock like omake.
+  - You can lock aliases by `key_mode2`(default: `*`), and locked aliases do not change by rerolling.
+- Implement extra number prompt like omake.
+- Add a minute hand to the top left clock.
+- Port English translation from omake EN, omake overhaul EN, and omake overhaul EN hack. Great thanks to Doorknob, the main translator of them.
+- Enhance skill tracker feature.
+  - Increase the amount of the available skill trackers(3->10).
+  - Show skill's potentials together.
+  - Color high potentials in green and low potentials in red.
+- Support full-scale PCC.
+- Add option's descriptions in Options menu.
+- Enhance damage popup feature.
+  - Add an option to change the number of the popups.
+  - Show popups when a buff is added/removed.
+  - Highlight elemental damages and healing.
+- Implement tile filling via left-click with Ctrl key by using a house board.
+- Speed up loading save data much.
+- Improve save data's portability especially for endianness.
+  - Elona foobar always saves data in little endian. If your machine runs in big endian, foobar converts data on loading and saving.
+- Show current minute zero-filled in log window like this `[05]`.
+- Change the order of messages when you eat raw equipments.
+- Show adventurers name in news.
+- Insert linebreak before message of changing ammo.
+- Do not query direction on using dresser if there are no allies around you.
+- Improve portrait system. Now, you can choose portraits prepared for different gender, and portraits for NPCs.
+- Add option to skip overcast warning prompt (default: disable).
+- Add option to enable text antialiasing (default: enabled). Also change the bundled font from KochiGothic to GenShinGochic to make text rendering more beautiful when antialiasing is on.
+- Give "yeek" (boss) to his own name, "\<Rodlob\> the boss of yeeks".
+  - The name is the reverse spelling of "Boldor", the Angband monster, as his Japanese name is.
+- Make message log window scrollable, storing up to 1000 lines. Available shortcut keys are as follows:
+  - `Up`: scroll 1 line up (to older)
+  - `Down`: scroll 1 line down (to newer)
+  - `Left`: scroll 1 page up (to older)
+  - `Right`: scroll 1 page down (to newer)
+- Add option to skip prompt to confirm selling/buying items in town shops (default: disable).
+- Port English translation of the main scenario's cutscenes from E+C.
+- Improve blackjack drawing.
+  - Draw character image in full-scale.
+  - Show each card's suit.
+  - Render card's rank as image.
+- Add option to show the current FPS, frame per second (default: disable).
+- Implement keybinding. You can customize them through the keybinding menu in the bottom of the option menu.
+- Prevent precious ally from being destroyed by gene machine. You can regard an ally as precious by using stethoscope to him/her.
+- Make possible to reload autopick definition file via `Shift+Backspace`.
+- Add new shortcut key, `Ctrl+Tab`, to move to the previous (left) menu.
+- Enhance autopick feature. These new features are almost omake-compatible.
+  - Support category-based selector.
+  - Support item modifiers.
+- Remove `log.txt` and add `log` folder. The folder holds up to 10 recent log files. `0.log` is the latest and `9.log` is the oldest.
+- Change `music` option from string to boolean because there is no difference between `mci` and `direct_music` backends.
+- Change "View Homepage" in main menu to "About". This menu contains the following submenu:
+  - Vanilla Elona Homepage
+  - Elona foobar Homepage
+  - Elona foobar Changelog
+  - License
+  - Credits
+- Reverse the displayed order of heirloom ranking. 1st comes first, 10th, last.
+- Show "maintains XX" and "negates the effect of XX" enchantments in item list menus.
+  - You can switch the mode via `z` in the same way to toggle resistance's visibility.
+  - None -> Resistances -> Maintenance and status ailments -> None -> ...
+- Implement profile feature.
+  - Add `profile` folder.
+  - Move the save folder to `profile/<profile name>/save` to make it possible to separate save folders for each profile.
+  - Move the configuration file to `profile/<profile name>/config.hcl` to allow you to customize options for each profile.
+- Don't autosave when NPC drinks potion of potential.
+- Make random number generation deterministic in some degree.
+- Change random number generator from lenear congruential generation to xoshiro256, an xorshift variant.
+- Experimental: Implement screenshot feature. You can take a screenshot via `Print Screen` (the key can be changed). Screenshots are saved in `profile/[current profile]/screenshot` folder.
+  - For now, you can take a screenshot only when the player character can act.
+- Check system-reserved path when foobar internally creates new file or folder.
+- Improve item name's plural rule in English.
+- Experimental: Support mouse partially.
+- Experimental: Implement Plamia Times, advanced game play log.
+- Restore vanilla's chat and vote feature.
+  - Add relevant options to configure what you want to send and receive.
+- Improve change appearance menu: show 4 directions at once.
+- Improve performance on change appearance menu. PCC images are loaded only if you change something.
+- Add new options to control key repeat.
+  - `initial_key_repeat_wait`: Number of frames to wait between the first action and the second.
+  - `key_repeat_wait`: Number of frames to wait between each action.
+- Change welcome message shown on game starting.
+  - The original one: "Lafrontier presents Elona ver 1.22. Welcome traveler!"
+  - Because this variant is neither "Elona ver 1.22" nor developed by "Lafrontier", change the message to "Welcome traveler!"
+- Do not set quest-related data in quest target item.
+  - With this change, quest items town villeggers have stack with other items.
+- Abolish the upper limit of the number of bone file entries (80 bones, before).
+  - The previous bone file (`bone.txt`) is *not* compatible with the new one.
+- Add party auto target option in "Ex setting (foobar)" section.
+  - If it is set to "Yes", your party members (excluding you) will automatically attack enemies that are visible to you.
+  - Default: "No"
+- Add digital clock option in "Ex setting (foobar)" seciton.
+  - If it is set to "Yes", the clock on the top left is replaced by a simple 24 hours digital clock. It shows hour, minute and second.
+  - Default: "No"
+- Partially support undo/redo in house design mode.
+  - It is an experimental feature. The key bindings may be changed in a future version.
+- Add application icon, atcat (Windows only so far).
+- Re-design in-game console feature.
+- Add new console commands.
+ - `:wish`
+ - `:gain_spell`
+ - `:gain_exp`
+ - `:gain_fame`
+- Add new options to configure sound/music volume (0-8). By default, 8 (maximum).
+- Change the internal representation of map items. Due to this, the number of items whih can be stacked at one tile increases from 3 to 4. Also, a bag icon comes to mean "5 or more items stacked here"; 2 bags, "10 or more"; 3 bags, "15 or more"; 4 bags, "20 or more"
+- Change the naming rule of the save folders.
+ - As a side-effect, you can choose any name you like without worrying whether the name is already used or not.
+ - Note that old save folders will not be renamed and you do not have to rename them.
+- Change inventory menu of "Steal" a bit.
+ - When you try to steal items on the ground, in vanilla and old foobar, player's money is shown in the menu. As it is useless information, hide it since this version.
+- Add information to the save selection menu.
+ - When you save an old save data in this version or newer, a new file, `header.json`, will be created. If a save has the file, its information is displayed in the save selection menu.
+- Make it possible to assign shortcut to use cargo items.
+ - You cannot use cargo items in Nefias and some other locations, as you cannot do so before.
+- Add "Hang" option to `i` nteract menu to hang arbitrary NPCs. It is available only in Wizard mode.
+
+### Options
+
+
+
+## Removed features
+
+- Remove compatibility with too old versions(older than 1.16).
+- Delete F12 console commands.
+- Delete unavailable option, `cfg_msg_box`.
+- Remove support of vanilla's custom file format.
+  - It is temporary. Of course, it will be implemented again.
+- Do not copy `original\config.txt`, no longer needed.
+- Delete support of old vanilla's save(older than 1.22).
+  - We have a plan to provide an importer/exporter in the future.
+- Delete `original` folder. You need no longer copy `original` folder from vanilla.
+- Remove support of `musiclist.txt` completely. The feature will be substituted by mods.
+- Delete some config options. They have no (less) effect, or are rarely set.
+  - `ui.msg_line`
+  - `ui.tile_size`
+  - `ui.font_size`
+  - `ui.inv_ver_type`
+  - `ui.window_x`
+  - `ui.window_y`
+  - `ui.clock_x`
+  - `ui.clock_w`
+  - `ui.clock_h`
+- Remove unused map files in game.
+- Delete `gdatan.s1`, unused save file.
+- Remove unused parts of `.map` files. This change reduces file size 90% in average.
