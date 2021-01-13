@@ -9,7 +9,11 @@ local enums = require("enums")
 
 local exports = {}
 
-local CONTEXT = {}
+local CONTEXT = {
+   color = Color.rgb(255, 255, 255),
+   alpha_mod = 255,
+   color_mod = Color.rgb(255, 255, 255),
+}
 local ASSET_CACHES = {}
 
 exports.Color = Color

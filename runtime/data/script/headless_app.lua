@@ -11,10 +11,6 @@ function HeadlessApp:is_headless()
    return true
 end
 
-function HeadlessApp:update()
-   return true
-end
-
 function HeadlessApp:screen_width()
    return 800
 end

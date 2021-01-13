@@ -9,6 +9,8 @@ local Color = graphics.Color
 
 local exports = {}
 
+exports.event = require("ui.event")
+
 local STATE = {
    wx = 0,
    wy = 0,

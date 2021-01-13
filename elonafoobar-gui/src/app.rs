@@ -1,15 +1,15 @@
 use crate::audio::Audio;
 use crate::error::SdlError;
+use crate::event::{Event, EventQueue};
 use crate::font_cache::FontCache;
 use crate::image::{Image, ImageContext};
 use anyhow::{format_err, Result};
-use sdl2::event::Event;
 use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use sdl2::render::{BlendMode, Texture, WindowCanvas};
 use sdl2::ttf::FontStyle;
 use sdl2::video::{DisplayMode, FullscreenType};
-use sdl2::{EventPump, Sdl, VideoSubsystem};
+use sdl2::{Sdl, VideoSubsystem};
 use std::path::Path;
 use std::time::Duration;
 
@@ -20,7 +20,7 @@ pub struct App {
     sdl: Sdl,
     #[allow(dead_code)]
     video: VideoSubsystem,
-    event_pump: EventPump,
+    event_queue: EventQueue,
     canvas: WindowCanvas,
     font_cache: FontCache,
     text_alignment: TextAlignment,
@@ -48,7 +48,7 @@ impl App {
     pub fn new(title: &str, display_mode: &str, fullscreen: FullscreenType) -> Result<App> {
         let sdl = sdl2::init().sdl_error()?;
         let video = sdl.video().sdl_error()?;
-        let event_pump = sdl.event_pump().sdl_error()?;
+        let event_queue = EventQueue::with_sdl(&sdl)?;
         let font_cache = FontCache::new()?;
         let image_context = ImageContext::new()?;
         let audio = Audio::new()?;
@@ -70,7 +70,7 @@ impl App {
         Ok(App {
             sdl,
             video,
-            event_pump,
+            event_queue,
             canvas,
             font_cache,
             text_alignment: TextAlignment::Left,
@@ -80,20 +80,15 @@ impl App {
         })
     }
 
-    pub fn update(&mut self) -> bool {
+    pub fn update(&mut self) {
         self.canvas.present();
-
         // TODO: fps
         std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
-
-        for event in self.event_pump.poll_iter() {
-            if let Event::Quit { .. } = event {
-                return false;
-            }
-        }
-
         self.canvas.clear();
-        true
+    }
+
+    pub fn poll_event(&mut self) -> Option<Event> {
+        self.event_queue.poll()
     }
 
     pub fn screen_width(&self) -> u32 {

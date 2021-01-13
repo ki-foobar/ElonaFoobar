@@ -1,4 +1,5 @@
 use crate::api::class_color::Color;
+use crate::api::class_event::Event;
 use crate::api::class_image::Image;
 use anyhow::Result;
 use elonafoobar_gui::{
@@ -49,6 +50,7 @@ pub fn bind(lua: &mut Lua) -> Result<()> {
         lua.set_function("stop_music", lua_stop_music)?;
         lua.set_function("get_music_volume", lua_get_music_volume)?;
         lua.set_function("set_music_volume", lua_set_music_volume)?;
+        lua.set_function("poll_event", lua_poll_event)?;
         Ok(())
     })
 }
@@ -59,8 +61,8 @@ fn lua_is_headless(_self_: &App) -> bool {
 }
 
 #[lua_function]
-fn lua_update(self_: &mut App) -> bool {
-    self_.0.update()
+fn lua_update(self_: &mut App) {
+    self_.0.update();
 }
 
 #[lua_function]
@@ -253,4 +255,9 @@ fn lua_get_music_volume(self_: &App) -> LuaInt {
 #[lua_function]
 fn lua_set_music_volume(self_: &App, volume: LuaInt) {
     self_.0.set_music_volume(clamp(volume));
+}
+
+#[lua_function]
+fn lua_poll_event(self_: &mut App) -> Option<Event> {
+    self_.0.poll_event().map(Event)
 }

@@ -41,9 +41,31 @@ function MainTitleMenu:on_closed()
    PREV_CURSOR = self._cursor
 end
 
-function MainTitleMenu:update()
+function MainTitleMenu:update(event)
    self._frame = self._frame + 1
 
+   if not event then
+      return
+   end
+
+   if event == "up" then
+      self._cursor.position = self._cursor.position - 1
+      if self._cursor.position < 1 then
+         self._cursor.position = #self._MENU_ITEMS
+      end
+   elseif event == "down" then
+      self._cursor.position = self._cursor.position + 1
+      if #self._MENU_ITEMS < self._cursor.position then
+         self._cursor.position = 1
+      end
+   elseif event == "enter" then
+      -- TODO
+      -- audio.play_sound("core.ok1")
+      print(self._MENU_ITEMS[self._cursor.position].result)
+   end
+end
+
+function MainTitleMenu:draw()
    graphics.draw_image("core.title", 0, 0, graphics.screen_width(), graphics.screen_height())
 
    graphics.set_draw_color(255, 255, 255)
@@ -104,7 +126,7 @@ function MainTitleMenu:update()
       ui.selection_key(key, x, y)
       if i18n.language() == "en" then
          graphics.set_font(14)
-         return ui.list_item(is_selected, main, x + 40, y + 1)
+         ui.list_item(is_selected, main, x + 40, y + 1)
       else
          local x_offset = ui.compat.wx()
          local y_offset = ui.compat.wy()
@@ -112,25 +134,19 @@ function MainTitleMenu:update()
          graphics.set_draw_color(0, 0, 0)
          graphics.draw_text(sub, x + 40 + x_offset, y - 4 + y_offset)
          graphics.set_font(13)
-         return ui.list_item(is_selected, main, x + 40, y + 8)
+         ui.list_item(is_selected, main, x + 40, y + 8)
       end
    end
 
-   local result
    for index, item in ipairs(self._MENU_ITEMS) do
-      if list_item(
-            self._cursor.position == index,
-            input.get_nth_selection_key(index),
-            item.text,
-            item.text_en,
-            0,
-            (index - 1) * 35) then
-         audio.play_sound("core.ok1")
-         result = item.result
-      end
+      list_item(
+         self._cursor.position == index,
+         input.get_nth_selection_key(index),
+         item.text,
+         item.text_en,
+         0,
+         (index - 1) * 35)
    end
-
-   return result
 end
 
 function MainTitleMenu:_draw_title_effect()

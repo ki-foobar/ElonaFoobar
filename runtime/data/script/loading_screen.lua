@@ -21,7 +21,13 @@ return function(init_thread)
    local progress = 0
    local message = ""
 
-   while app:update() do
+   while true do
+      app:update()
+      local event = app:poll_event()
+      while event do
+         event = app:poll_event()
+      end
+
       if coroutine.status(init_thread) == "dead" then
          if progress < 100 then
             progress = 100
