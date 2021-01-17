@@ -1,4 +1,4 @@
-use crate::types::{LuaFloat, LuaInt};
+use crate::types::{LuaFloat, LuaFnPtr, LuaInt};
 use anyhow::{bail, format_err, Result};
 use elonafoobar_lua_sys as sys;
 use elonafoobar_utils as utils;
@@ -77,21 +77,11 @@ pub fn lua_pushboolean(state: State, value: bool) {
     }
 }
 
-pub fn lua_pushlightuserdata(state: State, raw_pointer: *mut c_void) {
-    unsafe {
-        sys::lua_pushlightuserdata(state.as_ptr(), raw_pointer);
-    }
-}
-
-pub fn lua_pushcfunction(state: State, c_function_pointer: extern "C" fn(*mut lua_State) -> c_int) {
+pub fn lua_pushcfunction(state: State, c_function_pointer: LuaFnPtr) {
     lua_pushcclosure(state, c_function_pointer, 0);
 }
 
-pub fn lua_pushcclosure(
-    state: State,
-    c_function_pointer: extern "C" fn(*mut lua_State) -> c_int,
-    upvalues: c_int,
-) {
+pub fn lua_pushcclosure(state: State, c_function_pointer: LuaFnPtr, upvalues: c_int) {
     unsafe {
         sys::lua_pushcclosure(state.as_ptr(), Some(c_function_pointer), upvalues);
     }
@@ -124,12 +114,6 @@ pub fn lua_rawseti(state: State, idx: c_int, item_index: LuaInt) {
 pub fn lua_rawget(state: State, idx: c_int) {
     unsafe {
         sys::lua_rawget(state.as_ptr(), idx);
-    }
-}
-
-pub fn lua_dup(state: State) {
-    unsafe {
-        sys::lua_pushvalue(state.as_ptr(), -1);
     }
 }
 
@@ -439,4 +423,3 @@ pub const LUA_ERRSYNTAX: c_int = sys::LUA_ERRSYNTAX as c_int;
 pub const LUA_ERRRUN: c_int = sys::LUA_ERRRUN as c_int;
 pub const LUA_ERRMEM: c_int = sys::LUA_ERRMEM as c_int;
 pub const LUA_ERRERR: c_int = sys::LUA_ERRERR as c_int;
-pub const LUA_REGISTRYINDEX: c_int = sys::LUA_REGISTRYINDEX;

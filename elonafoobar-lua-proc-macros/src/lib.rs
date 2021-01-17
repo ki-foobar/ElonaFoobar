@@ -83,14 +83,14 @@ fn lua_function_impl(func: ItemFn, args: LuaFunctionArgs) -> TokenStream2 {
             })
             .collect::<Vec<_>>();
         if argument_types.is_empty() {
-            quote! { __args: () }
+            quote! { () }
         } else if takes_lua_state {
             let mut argument_types = argument_types.iter();
-            let first = argument_types.next().unwrap();
+            let _first = argument_types.next().unwrap();
             let rest = argument_types;
-            quote! { __lua: #first, __args: ( #( #rest ),*, ) }
+            quote! { ( #( #rest ),*, ) }
         } else {
-            quote! { __args: ( #( #argument_types ),*, ) }
+            quote! { ( #( #argument_types ),*, ) }
         }
     };
 
@@ -99,7 +99,10 @@ fn lua_function_impl(func: ItemFn, args: LuaFunctionArgs) -> TokenStream2 {
     let fn_arguments = {
         if takes_lua_state {
             let tuple_indice = make_index_sequence(func.sig.inputs.len() - 1);
-            quote! { __lua, #( __args.#tuple_indice ),* }
+            quote! {
+                &mut ::elonafoobar_lua::__internal::wrap_lua(__state),
+                #( __args.#tuple_indice ),*
+            }
         } else {
             let tuple_indice = make_index_sequence(func.sig.inputs.len());
             quote! { #( __args.#tuple_indice ),* }
@@ -122,12 +125,37 @@ fn lua_function_impl(func: ItemFn, args: LuaFunctionArgs) -> TokenStream2 {
     quote! {
         #outer_fn_attributes
         #outer_fn_visibility
-        fn #outer_fn_name(#outer_fn_arguments) #fn_return_type {
+        extern "C" fn #outer_fn_name(
+            __state: *mut ::elonafoobar_lua::__internal::lua_State,
+        ) -> ::elonafoobar_lua::__internal::Nresults {
             #[inline]
             fn __do(#inner_fn_arguments) #fn_return_type #inner_fn_block
 
+            let __state = ::std::ptr::NonNull::new(__state).expect("Lua state is null");
+
             #trace
-            __do(#fn_arguments)
+
+            match (|| -> ::anyhow::Result<::elonafoobar_lua::__internal::Nresults> {
+                use ::elonafoobar_lua::__internal::{FromLuaValues, ToLuaValues};
+
+                let __args = <#outer_fn_arguments>::pop_all(__state)?;
+                let __results = __do(#fn_arguments);
+                __results.push_all(__state)
+            })() {
+                ::anyhow::Result::Ok(nresults) => nresults,
+                ::anyhow::Result::Err(err) => {
+                    ::elonafoobar_lua::__internal::luaL_error(
+                        __state,
+                        &::std::format!(
+                            "{} in `{}`",
+                            err.to_string(),
+                            #lua_fn_name,
+                        ),
+                    );
+                    // ^ never returns
+                    0
+                }
+            }
         }
     }
 }

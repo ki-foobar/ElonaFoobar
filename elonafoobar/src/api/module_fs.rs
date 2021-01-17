@@ -19,7 +19,7 @@ pub fn bind(lua: &mut Lua) -> Result<()> {
         lua.set_function("get_config_file_path", lua_get_config_file_path)?;
         lua.set_function("get_lua_full_path", lua_get_lua_full_path)?;
         lua.set_function("resolve_path_for_mod", lua_resolve_path_for_mod)?;
-        lua.set_function_with_state("resolve_relative_path", lua_resolve_relative_path)?;
+        lua.set_function("resolve_relative_path", lua_resolve_relative_path)?;
         Ok(())
     })
 }

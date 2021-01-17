@@ -1,8 +1,12 @@
+use crate::ffi;
+
 pub type LuaInt = i64;
 pub type LuaFloat = f64;
 
 // TODO
 pub struct LuaTable {}
+
+pub type LuaFnPtr = extern "C" fn(*mut ffi::lua_State) -> ffi::Nresults;
 
 pub trait LuaUserdata {
     const NAME: &'static str;

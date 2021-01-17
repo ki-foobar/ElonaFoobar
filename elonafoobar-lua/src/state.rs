@@ -1,8 +1,7 @@
-use crate::conv::{FromLuaValues, ToLuaValues};
-use crate::types::{LuaFloat, LuaInt};
+use crate::conv::ToLuaValues;
+use crate::types::{LuaFloat, LuaFnPtr, LuaInt};
 use crate::{ffi, LuaUserdata};
 use anyhow::{format_err, Result};
-use std::ffi::c_void;
 use std::path::{self, Path, PathBuf};
 use std::ptr::NonNull;
 
@@ -57,104 +56,9 @@ impl Lua {
         Ok(())
     }
 
-    pub fn set_function<A, R>(&mut self, func_name: &str, func: fn(A) -> R) -> Result<()>
-    where
-        A: FromLuaValues,
-        R: ToLuaValues,
-    {
-        extern "C" fn lua_fn<A, R>(lua_state: *mut ffi::lua_State) -> ffi::Nresults
-        where
-            A: FromLuaValues,
-            R: ToLuaValues,
-        {
-            unsafe {
-                let lua_state = NonNull::new(lua_state).expect("Lua state is null");
-
-                let actual_function_pointer =
-                    ffi::lua_touserdata(lua_state, ffi::LUA_REGISTRYINDEX - 2);
-                let actual_function_pointer: fn(A) -> R =
-                    std::mem::transmute(actual_function_pointer);
-
-                match (|| -> Result<ffi::Nresults> {
-                    let args = A::pop_all(lua_state)?;
-                    let results = actual_function_pointer(args);
-                    results.push_all(lua_state)
-                })() {
-                    Ok(nresults) => nresults,
-                    Err(err) => {
-                        let func_name = ffi::lua_tostring(lua_state, ffi::LUA_REGISTRYINDEX - 1);
-                        ffi::luaL_error(
-                            lua_state,
-                            &format!(
-                                "{} in `{}`",
-                                err.to_string(),
-                                func_name.unwrap_or("<unkonwn function>")
-                            ),
-                        );
-                        // ^ never returns
-                        0
-                    }
-                }
-            }
-        }
-
+    pub fn set_function(&mut self, func_name: &str, func: LuaFnPtr) -> Result<()> {
         ffi::lua_pushstring(self.inner, func_name)?;
-        ffi::lua_dup(self.inner);
-        ffi::lua_pushlightuserdata(self.inner, func as *mut c_void);
-        ffi::lua_pushcclosure(self.inner, lua_fn::<A, R>, 2);
-        ffi::lua_rawset(self.inner, -3);
-        Ok(())
-    }
-
-    pub fn set_function_with_state<A, R>(
-        &mut self,
-        func_name: &str,
-        func: fn(&mut Self, A) -> R,
-    ) -> Result<()>
-    where
-        A: FromLuaValues,
-        R: ToLuaValues,
-    {
-        extern "C" fn lua_fn<A, R>(lua_state: *mut ffi::lua_State) -> ffi::Nresults
-        where
-            A: FromLuaValues,
-            R: ToLuaValues,
-        {
-            unsafe {
-                let lua_state = NonNull::new(lua_state).expect("Lua state is null");
-
-                let actual_function_pointer =
-                    ffi::lua_touserdata(lua_state, ffi::LUA_REGISTRYINDEX - 2);
-                let actual_function_pointer: fn(&mut Lua, A) -> R =
-                    std::mem::transmute(actual_function_pointer);
-
-                match (|| -> Result<ffi::Nresults> {
-                    let args = A::pop_all(lua_state)?;
-                    let results = actual_function_pointer(&mut Lua::wrap(lua_state), args);
-                    results.push_all(lua_state)
-                })() {
-                    Ok(nresults) => nresults,
-                    Err(err) => {
-                        let func_name = ffi::lua_tostring(lua_state, ffi::LUA_REGISTRYINDEX - 1);
-                        ffi::luaL_error(
-                            lua_state,
-                            &format!(
-                                "{} in `{}`",
-                                err.to_string(),
-                                func_name.unwrap_or("<unkonwn function>")
-                            ),
-                        );
-                        // ^ never returns
-                        0
-                    }
-                }
-            }
-        }
-
-        ffi::lua_pushstring(self.inner, func_name)?;
-        ffi::lua_dup(self.inner);
-        ffi::lua_pushlightuserdata(self.inner, func as *mut c_void);
-        ffi::lua_pushcclosure(self.inner, lua_fn::<A, R>, 2);
+        ffi::lua_pushcfunction(self.inner, func);
         ffi::lua_rawset(self.inner, -3);
         Ok(())
     }
@@ -288,7 +192,7 @@ impl Lua {
         Ok(())
     }
 
-    fn wrap(inner: ffi::State) -> Lua {
+    pub(crate) fn wrap(inner: ffi::State) -> Lua {
         Lua { inner }
     }
 }

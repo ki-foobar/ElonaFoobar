@@ -12,3 +12,6 @@ pub use crate::state::Lua;
 pub use crate::types::{AsLuaInt, LuaUserdata};
 
 pub use crate::conv::{FromLuaInt, IntoLuaInt};
+
+// It is public for `elonafoobar_lua_proc_macros`.
+pub mod __internal;
