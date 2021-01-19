@@ -34,7 +34,9 @@ do
    local show_loading_screen = require("loading_screen")
    local init_thread = require("init_thread")
    show_loading_screen(init_thread)
-   assert(coroutine.status(init_thread) == "dead")
+   if coroutine.status(init_thread) ~= "dead" then
+      return -- Interrupted by user
+   end
 end
 
 if subcommand == "run" then

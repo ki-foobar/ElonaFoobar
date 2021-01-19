@@ -66,8 +66,18 @@ pub enum EventKind {
     Unknown,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(C)]
+pub enum Key {
+    Unknown,
+    Up,
+    Down,
+    Enter,
+}
+
 pub trait EventExt {
     fn kind(&self) -> EventKind;
+    fn key(&self) -> Option<Key>;
 }
 
 impl EventExt for Event {
@@ -119,6 +129,30 @@ impl EventExt for Event {
             Event::RenderDeviceReset { .. } => EventKind::RenderDeviceReset,
             Event::User { .. } => EventKind::User,
             Event::Unknown { .. } => EventKind::Unknown,
+        }
+    }
+
+    fn key(&self) -> Option<Key> {
+        use sdl2::keyboard::Keycode;
+
+        match self {
+            Event::KeyDown {
+                keycode: Some(k), ..
+            } => Some(match k {
+                Keycode::Up => Key::Up,
+                Keycode::Down => Key::Down,
+                Keycode::Return => Key::Enter,
+                _ => Key::Unknown,
+            }),
+            Event::KeyUp {
+                keycode: Some(k), ..
+            } => Some(match k {
+                Keycode::Up => Key::Up,
+                Keycode::Down => Key::Down,
+                Keycode::Return => Key::Enter,
+                _ => Key::Unknown,
+            }),
+            _ => None,
         }
     }
 }

@@ -9,60 +9,75 @@ local i18n = require("i18n")
 local input = require("input")
 local ui = require("ui")
 local Cursor = ui.Cursor
+local ListView = require("ui.list_view")
 local rnd = require("random").rnd
 
 local MainTitleMenu = class("core.ui.MainTitleMenu")
 
 local PREV_CURSOR = nil
 
+local MainTitleMenuListView = class("core.ui.MainTitleMenuListView", ListView)
+
+function MainTitleMenuListView:draw_item(index, item)
+   local is_selected = self.cursor.position == index
+   local x = 40
+   local y = (index - 1) * 35 + 50
+
+   ui.selection_key(input.get_nth_selection_key(index), x, y)
+   if i18n.language() == "en" then
+      graphics.set_font(14)
+      ui.list_item(is_selected, item.text, x + 40, y + 1)
+   else
+      local x_offset = ui.compat.wx()
+      local y_offset = ui.compat.wy()
+      graphics.set_font(11)
+      graphics.set_draw_color(0, 0, 0)
+      graphics.draw_text(item.text_en, x + 40 + x_offset, y - 4 + y_offset)
+      graphics.set_font(13)
+      ui.list_item(is_selected, item.text, x + 40, y + 8)
+   end
+end
+
+function MainTitleMenuListView:on_item_selected(selected_item)
+   -- TODO
+   -- audio.play_sound("core.ok1")
+   print(selected_item.result)
+end
+
 function MainTitleMenu:__init()
    self._background_image_index = 4
    self._ripple_sources = {}
    self._ripples = {}
    self._frame = 0
-   self._RIPPLE_IMAGE_SIZE = HOGE
-   self._MENU_ITEMS = {
-      { text = i18n.get("core.main_menu.title_menu.continue"),  text_en = "Restore an Adventurer",   result = "continue"  },
-      { text = i18n.get("core.main_menu.title_menu.new"),       text_en = "Generate an Adventurer",  result = "new"       },
-      { text = i18n.get("core.main_menu.title_menu.incarnate"), text_en = "Incarnate an Adventurer", result = "incarnate" },
-      { text = i18n.get("core.main_menu.title_menu.about"),     text_en = "About",                   result = "about"     },
-      { text = i18n.get("core.main_menu.title_menu.options"),   text_en = "Options",                 result = "options"   },
-      { text = i18n.get("core.main_menu.title_menu.mods"),      text_en = "Mods",                    result = "mods"      },
-      { text = i18n.get("core.main_menu.title_menu.exit"),      text_en = "Exit",                    result = "exit"      },
-   }
+   self._menu = MainTitleMenuListView.new({
+      items = {
+         { text = i18n.get("core.main_menu.title_menu.continue"),  text_en = "Restore an Adventurer",   result = "continue"  },
+         { text = i18n.get("core.main_menu.title_menu.new"),       text_en = "Generate an Adventurer",  result = "new"       },
+         { text = i18n.get("core.main_menu.title_menu.incarnate"), text_en = "Incarnate an Adventurer", result = "incarnate" },
+         { text = i18n.get("core.main_menu.title_menu.about"),     text_en = "About",                   result = "about"     },
+         { text = i18n.get("core.main_menu.title_menu.options"),   text_en = "Options",                 result = "options"   },
+         { text = i18n.get("core.main_menu.title_menu.mods"),      text_en = "Mods",                    result = "mods"      },
+         { text = i18n.get("core.main_menu.title_menu.exit"),      text_en = "Exit",                    result = "exit"      },
+      },
+   })
 end
 
 function MainTitleMenu:on_shown()
    audio.play_music("core.opening")
-   self._cursor = PREV_CURSOR or Cursor.new(1, 1)
+   self._menu.cursor = PREV_CURSOR or Cursor.new(1, 1)
 end
 
 function MainTitleMenu:on_closed()
-   PREV_CURSOR = self._cursor
+   PREV_CURSOR = self._menu.cursor
 end
 
-function MainTitleMenu:update(event)
+function MainTitleMenu:on_key_down(event)
+   self._menu:on_key_down(event)
+end
+
+function MainTitleMenu:update()
+   self._menu:update()
    self._frame = self._frame + 1
-
-   if not event then
-      return
-   end
-
-   if event == "up" then
-      self._cursor.position = self._cursor.position - 1
-      if self._cursor.position < 1 then
-         self._cursor.position = #self._MENU_ITEMS
-      end
-   elseif event == "down" then
-      self._cursor.position = self._cursor.position + 1
-      if #self._MENU_ITEMS < self._cursor.position then
-         self._cursor.position = 1
-      end
-   elseif event == "enter" then
-      -- TODO
-      -- audio.play_sound("core.ok1")
-      print(self._MENU_ITEMS[self._cursor.position].result)
-   end
 end
 
 function MainTitleMenu:draw()
@@ -120,33 +135,7 @@ function MainTitleMenu:draw()
 
    graphics.set_draw_color(0, 0, 0)
 
-   local function list_item(is_selected, key, main, sub, x, y)
-      x = x + 40
-      y = y + 50
-      ui.selection_key(key, x, y)
-      if i18n.language() == "en" then
-         graphics.set_font(14)
-         ui.list_item(is_selected, main, x + 40, y + 1)
-      else
-         local x_offset = ui.compat.wx()
-         local y_offset = ui.compat.wy()
-         graphics.set_font(11)
-         graphics.set_draw_color(0, 0, 0)
-         graphics.draw_text(sub, x + 40 + x_offset, y - 4 + y_offset)
-         graphics.set_font(13)
-         ui.list_item(is_selected, main, x + 40, y + 8)
-      end
-   end
-
-   for index, item in ipairs(self._MENU_ITEMS) do
-      list_item(
-         self._cursor.position == index,
-         input.get_nth_selection_key(index),
-         item.text,
-         item.text_en,
-         0,
-         (index - 1) * 35)
-   end
+   self._menu:draw()
 end
 
 function MainTitleMenu:_draw_title_effect()

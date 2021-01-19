@@ -52,17 +52,84 @@ local EventKind = enums.new_enum {
 }
 exports.EventKind = EventKind
 
-function exports.update()
+local Key = enums.new_enum {
+   UNKNOWN = 0,
+   UP = 1,
+   DOWN = 2,
+   ENTER = 3,
+}
+exports.Key = Key
+
+local EVENT_HANDLER_NAMES = {
+   [EventKind.QUIT] = "on_quit",
+   [EventKind.APP_TERMINATING] = "on_app_terminating",
+   [EventKind.APP_LOW_MEMORY] = "on_app_low_memory",
+   [EventKind.APP_WILL_ENTER_BACKGROUND] = "on_app_will_enter_background",
+   [EventKind.APP_DID_ENTER_BACKGROUND] = "on_app_did_enter_background",
+   [EventKind.APP_WILL_ENTER_FOREGROUND] = "on_app_will_enter_foreground",
+   [EventKind.APP_DID_ENTER_FOREGROUND] = "on_app_did_enter_foreground",
+   [EventKind.WINDOW] = "on_window",
+   [EventKind.KEY_DOWN] = "on_key_down",
+   [EventKind.KEY_UP] = "on_key_up",
+   [EventKind.TEXT_EDITING] = "on_text_editing",
+   [EventKind.TEXT_INPUT] = "on_text_input",
+   [EventKind.MOUSE_MOTION] = "on_mouse_motion",
+   [EventKind.MOUSE_BUTTON_DOWN] = "on_mouse_button_down",
+   [EventKind.MOUSE_BUTTON_UP] = "on_mouse_button_up",
+   [EventKind.MOUSE_WHEEL] = "on_mouse_wheel",
+   [EventKind.JOY_AXIS_MOTION] = "on_joy_axis_motion",
+   [EventKind.JOY_BALL_MOTION] = "on_joy_ball_motion",
+   [EventKind.JOY_HAT_MOTION] = "on_joy_hat_motion",
+   [EventKind.JOY_BUTTON_DOWN] = "on_joy_button_down",
+   [EventKind.JOY_BUTTON_UP] = "on_joy_button_up",
+   [EventKind.JOY_DEVICE_ADDED] = "on_joy_device_added",
+   [EventKind.JOY_DEVICE_REMOVED] = "on_joy_device_removed",
+   [EventKind.CONTROLLER_AXIS_MOTION] = "on_controller_axis_motion",
+   [EventKind.CONTROLLER_BUTTON_DOWN] = "on_controller_button_down",
+   [EventKind.CONTROLLER_BUTTON_UP] = "on_controller_button_up",
+   [EventKind.CONTROLLER_DEVICE_ADDED] = "on_controller_device_added",
+   [EventKind.CONTROLLER_DEVICE_REMOVED] = "on_controller_device_removed",
+   [EventKind.CONTROLLER_DEVICE_REMAPPED] = "on_controller_device_remapped",
+   [EventKind.FINGER_DOWN] = "on_finger_down",
+   [EventKind.FINGER_UP] = "on_finger_up",
+   [EventKind.FINGER_MOTION] = "on_finger_motion",
+   [EventKind.DOLLAR_GESTURE] = "on_dollar_gesture",
+   [EventKind.DOLLAR_RECORD] = "on_dollar_record",
+   [EventKind.MULTI_GESTURE] = "on_multi_gesture",
+   [EventKind.CLIPBOARD_UPDATE] = "on_clipboard_update",
+   [EventKind.DROP_FILE] = "on_drop_file",
+   [EventKind.DROP_TEXT] = "on_drop_text",
+   [EventKind.DROP_BEGIN] = "on_drop_begin",
+   [EventKind.DROP_COMPLETE] = "on_drop_complete",
+   [EventKind.AUDIO_DEVICE_ADDED] = "on_audio_device_added",
+   [EventKind.AUDIO_DEVICE_REMOVED] = "on_audio_device_removed",
+   [EventKind.RENDER_TARGETS_RESET] = "on_render_targets_reset",
+   [EventKind.RENDER_DEVICE_RESET] = "on_render_device_reset",
+   [EventKind.USER] = "on_user",
+   [EventKind.UNKNOWN] = "on_unknown",
+}
+
+function exports.update(ui_layers)
+   local keys = {}
+
    local event = __APP:poll_event()
    while event do
       local event_kind = event:kind()
-      if event_kind == EventKind.QUIT then
-         return "quit"
-      elseif event_kind == EventKind.KEY_DOWN then
-         return "key_down"
-      elseif event_kind == EventKind.KEY_UP then
-         return "key_up"
+      local handler_name = EVENT_HANDLER_NAMES[event_kind]
+
+      local was_handler_called = false
+      for _, layer in ipairs(ui_layers) do
+         local handler = layer[handler_name]
+         if handler then
+            handler(layer, event)
+            was_handler_called = true
+            break
+         end
       end
+      if event_kind == EventKind.QUIT and not was_handler_called then
+         return "quit"
+      end
+
       event = __APP:poll_event()
    end
 end

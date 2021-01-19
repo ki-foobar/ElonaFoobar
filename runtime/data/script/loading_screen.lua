@@ -25,6 +25,9 @@ return function(init_thread)
       app:update()
       local event = app:poll_event()
       while event do
+         if event:kind() == 0 then -- Quit event
+            return
+         end
          event = app:poll_event()
       end
 

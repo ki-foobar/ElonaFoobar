@@ -6,14 +6,14 @@ local function main_loop(initial_state)
 
    local ui_layers = {}
 
-   local update_thread = coroutine.create(function(event)
+   local update_thread = coroutine.create(function()
       while true do
          for _, layer in ipairs(ui_layers) do
             if layer.update then
-               layer:update(event)
+               layer:update()
             end
          end
-         event = coroutine.yield()
+         coroutine.yield()
       end
    end)
 
@@ -37,12 +37,12 @@ local function main_loop(initial_state)
    ui_layers[#ui_layers + 1] = initial_state
    while true do
       app:update()
-      local event = ui.event.update()
-      if event == "quit" then
+      local result = ui.event.update(ui_layers)
+      if result == "quit" then
          break
       end
 
-      local ok, result = coroutine.resume(update_thread, event)
+      local ok, result = coroutine.resume(update_thread)
       if not ok then
          error(result)
       end
