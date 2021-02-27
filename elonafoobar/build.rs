@@ -8,9 +8,9 @@ use vergen::{generate_cargo_keys, ConstantsFlags};
 
 fn main() -> Result<()> {
     output_cargo_flags()?;
-    copy_runtime_dir()?;
-    make_symlink_to_vanilla_dir()?;
-    rename_mod_dir()?;
+    // copy_runtime_dir()?;
+    // make_symlink_to_vanilla_dir()?;
+    // rename_mod_dir()?;
     output_mod_core_version()?;
     Ok(())
 }
@@ -24,6 +24,7 @@ fn output_cargo_flags() -> Result<()> {
 }
 
 // Copy whole contents in `runtime` directory to the build directory.
+#[allow(dead_code)] // TODO
 fn copy_runtime_dir() -> Result<()> {
     // TODO: better way to get these paths?
     let runtime_dir = Path::new("../runtime");
@@ -38,6 +39,7 @@ fn copy_runtime_dir() -> Result<()> {
 }
 
 // Make symbolic link to vanilla's `graphic` and `sound` directory.
+#[allow(dead_code)] // TODO
 fn make_symlink_to_vanilla_dir() -> Result<()> {
     // TODO: better way to get these paths?
     let vanilla_dir = Path::new("../../deps/elona");
@@ -49,6 +51,7 @@ fn make_symlink_to_vanilla_dir() -> Result<()> {
     Ok(())
 }
 
+#[allow(dead_code)] // TODO
 fn rename_mod_dir() -> Result<()> {
     let version_pattern = Regex::new(r#"version: "(.+?)""#).unwrap();
 

@@ -1,14 +1,22 @@
 local graphics = require("graphics")
 local ui = require("ui")
 
-local function main_loop(initial_state)
-   local app = __APP
+local exports = {}
 
-   local ui_layers = {}
+local SCENES = {}
+local CURRENT_SCENE = nil
+
+function exports.push_scene(scene)
+   SCENES[#SCENES + 1] = scene
+   CURRENT_SCENE = scene
+end
+
+function exports.start(initial_state)
+   local app = __APP
 
    local update_thread = coroutine.create(function()
       while true do
-         for _, layer in ipairs(ui_layers) do
+         for _, layer in ipairs(CURRENT_SCENE.ui_layers) do
             if layer.update then
                layer:update()
             end
@@ -19,7 +27,7 @@ local function main_loop(initial_state)
 
    local draw_thread = coroutine.create(function()
       while true do
-         for _, layer in ipairs(ui_layers) do
+         for _, layer in ipairs(CURRENT_SCENE.ui_layers) do
             graphics.reset_context()
             ui.clear()
             if layer.draw then
@@ -34,10 +42,12 @@ local function main_loop(initial_state)
    if initial_state.on_shown then
       initial_state:on_shown()
    end
-   ui_layers[#ui_layers + 1] = initial_state
+   exports.push_scene({
+      ui_layers = {initial_state},
+   })
    while true do
       app:update()
-      local result = ui.event.update(ui_layers)
+      local result = ui.event.update(CURRENT_SCENE.ui_layers)
       if result == "quit" then
          break
       end
@@ -59,4 +69,4 @@ local function main_loop(initial_state)
    end
 end
 
-return main_loop
+return exports

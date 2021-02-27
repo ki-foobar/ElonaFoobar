@@ -42,7 +42,7 @@ end
 if subcommand == "run" then
    local main_loop = require("main_loop")
    local MainTitleMenu = require("ui.main_title_menu")
-   main_loop(MainTitleMenu.new())
+   main_loop.start(MainTitleMenu.new())
 elseif subcommand == "repl" then
    local repl = require("repl")
    repl()

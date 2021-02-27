@@ -16,6 +16,16 @@ local MainTitleMenu = class("core.ui.MainTitleMenu")
 
 local PREV_CURSOR = nil
 
+local nop = function() end
+
+local function new_game()
+   local CharamakingSelectRaceMenu = require("ui.charamaking_select_race_menu")
+   local main_loop = require("main_loop")
+   main_loop.push_scene({
+      ui_layers = {CharamakingSelectRaceMenu.new(nil)},
+   })
+end
+
 local MainTitleMenuListView = class("core.ui.MainTitleMenuListView", ListView)
 
 function MainTitleMenuListView:draw_item(index, item)
@@ -41,7 +51,7 @@ end
 function MainTitleMenuListView:on_item_selected(selected_item)
    -- TODO
    -- audio.play_sound("core.ok1")
-   print(selected_item.result)
+   selected_item.on_selected()
 end
 
 function MainTitleMenu:__init()
@@ -51,13 +61,13 @@ function MainTitleMenu:__init()
    self._frame = 0
    self._menu = MainTitleMenuListView.new({
       items = {
-         { text = i18n.get("core.main_menu.title_menu.continue"),  text_en = "Restore an Adventurer",   result = "continue"  },
-         { text = i18n.get("core.main_menu.title_menu.new"),       text_en = "Generate an Adventurer",  result = "new"       },
-         { text = i18n.get("core.main_menu.title_menu.incarnate"), text_en = "Incarnate an Adventurer", result = "incarnate" },
-         { text = i18n.get("core.main_menu.title_menu.about"),     text_en = "About",                   result = "about"     },
-         { text = i18n.get("core.main_menu.title_menu.options"),   text_en = "Options",                 result = "options"   },
-         { text = i18n.get("core.main_menu.title_menu.mods"),      text_en = "Mods",                    result = "mods"      },
-         { text = i18n.get("core.main_menu.title_menu.exit"),      text_en = "Exit",                    result = "exit"      },
+         { text = i18n.get("core.main_menu.title_menu.continue"),  text_en = "Restore an Adventurer",   on_selected = nop },
+         { text = i18n.get("core.main_menu.title_menu.new"),       text_en = "Generate an Adventurer",  on_selected = new_game },
+         { text = i18n.get("core.main_menu.title_menu.incarnate"), text_en = "Incarnate an Adventurer", on_selected = nop },
+         { text = i18n.get("core.main_menu.title_menu.about"),     text_en = "About",                   on_selected = nop },
+         { text = i18n.get("core.main_menu.title_menu.options"),   text_en = "Options",                 on_selected = nop },
+         { text = i18n.get("core.main_menu.title_menu.mods"),      text_en = "Mods",                    on_selected = nop },
+         { text = i18n.get("core.main_menu.title_menu.exit"),      text_en = "Exit",                    on_selected = nop },
       },
    })
 end
