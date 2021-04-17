@@ -1,7 +1,7 @@
-local data = require("core.data")
+local Data = require("core.Data")
 
-data.define_prototype("story_quest")
-data.add(
+Data.define_prototype("story_quest")
+Data.add(
    "core.story_quest",
    {
       tutorial = {

@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add_data_text(
+I18N.add_data_text(
    "core.skill",
    {
       stat_life = {
@@ -793,7 +793,7 @@ i18n.add_data_text(
 )
 
 
-i18n.add {
+I18N.add {
    skill = {
       gained = "You have learned new ability, {$1}.",
 

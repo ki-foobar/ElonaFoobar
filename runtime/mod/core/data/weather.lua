@@ -1,7 +1,7 @@
-local data = require("core.data")
+local Data = require("core.Data")
 
-data.define_prototype("weather")
-data.add(
+Data.define_prototype("weather")
+Data.add(
    "core.weather",
    {
       sunny = {

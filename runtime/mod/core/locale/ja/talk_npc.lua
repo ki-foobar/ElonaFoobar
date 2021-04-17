@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    talk = {
       will_not_listen = "{name($1)}は耳を貸さない。",
       is_sleeping = "{name($1)}はぐっすり眠っている…",

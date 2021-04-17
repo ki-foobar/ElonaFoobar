@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    win = {
       conquer_lesimas = "信じられない！あなたはネフィアの迷宮「レシマス」を制覇した！",
       you_acquired_codex = "{$1}{$2}に祝福あれ！あなたは遂にレシマスの秘宝を手にいれた！",

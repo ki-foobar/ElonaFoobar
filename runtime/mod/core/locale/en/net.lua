@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    net = {
       failed_to_send = "Failed to send a message.",
       failed_to_receive = "Failed to receive messages.",

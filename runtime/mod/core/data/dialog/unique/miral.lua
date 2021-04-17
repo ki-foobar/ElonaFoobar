@@ -1,6 +1,6 @@
 local Chara = require("core.Chara")
 local GUI = require("core.GUI")
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 local Internal = require("core.Internal")
 local Item = require("core.Item")
 local World = require("core.World")
@@ -20,7 +20,7 @@ local function upgrade_cargo_limit()
    local small_medals = Item.find("core.small_medal", "player_inventory")
 
    GUI.txtnew()
-   GUI.txt(i18n.get(
+   GUI.txt(I18N.get(
           "core.talk.unique.miral.upgrade_cart.give.limit_increased",
           Item.weight_string(amount)))
    GUI.play_sound("core.build1")

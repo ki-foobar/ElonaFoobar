@@ -1,7 +1,7 @@
 local Chara = require("core.Chara")
-local enums = require("core.enums")
+local Enums = require("core.Enums")
 local GUI = require("core.GUI")
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 local Internal = require("core.Internal")
 local Item = require("core.Item")
 local Map = require("core.Map")
@@ -41,8 +41,8 @@ return {
             local item = Item.create(Chara.player().position, "core.bejeweled_chest", 0)
             item.param2 = 0
             GUI.play_sound("core.write1")
-            GUI.txt(i18n.get("core.talk.unique.slan.you_receive"))
-            GUI.txt(i18n.get("core.talk.unique.slan.dies", t.speaker))
+            GUI.txt(I18N.get("core.talk.unique.slan.you_receive"))
+            GUI.txt(I18N.get("core.talk.unique.slan.dies", t.speaker))
             t.speaker:vanquish()
          end
       }

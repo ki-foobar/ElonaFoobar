@@ -79,17 +79,17 @@ config {
          min = 1,
          max = 30,
       },
-      -- option "language_blocklist", {
+      -- option "language_blacklist", {
       --    type = "array",
       --    default = {},
       --    is_hidden = true,
       -- },
-      -- option "word_blocklist", {
+      -- option "word_blacklist", {
       --    type = "array",
       --    default = {},
       --    is_hidden = true,
       -- },
-      -- option "player_blocklist", {
+      -- option "player_blacklist", {
       --    type = "array",
       --    default = {},
       --    is_hidden = true,

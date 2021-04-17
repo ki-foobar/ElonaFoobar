@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    god = {
       eyth_name = "無のエイス",
       indifferent = "あなたの信仰は既に限界まで高まっている。",
@@ -49,7 +49,7 @@ i18n.add {
 
 
 
-i18n.add_data_text(
+I18N.add_data_text(
    "core.god",
    {
       mani = {

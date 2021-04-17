@@ -1,5 +1,5 @@
 local Chara = require("core.Chara")
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 local World = require("core.World")
 
 return {
@@ -22,7 +22,7 @@ return {
                 else
                    sex = 0
                 end
-                return {i18n.get_enum("core.ui.sex", sex)}
+                return {I18N.get_enum("core.ui.sex", sex)}
             end},
             {"dialog._1"},
             {"dialog._2"},

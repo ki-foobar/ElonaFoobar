@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    magic = {
       common = {
          too_exhausted = "You are too exhausted!",

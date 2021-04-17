@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    chara_status = {
       gain_new_body_part = "{name($1)} grow{s($1)} a new {$2}!",
 

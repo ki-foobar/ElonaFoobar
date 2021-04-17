@@ -6,10 +6,13 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.rs]
+[*.{c,h,cpp,hpp}]
 indent_style = space
 indent_size = 4
 
 [*.lua]
 indent_style = space
 indent_size = 3
+
+[Makefile]
+indent_style = tab

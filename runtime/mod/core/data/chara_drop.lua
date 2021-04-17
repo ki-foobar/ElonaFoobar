@@ -1,6 +1,6 @@
 local Chara = require("core.Chara")
-local data = require("core.data")
-local enums = require("core.enums")
+local Data = require("core.Data")
+local Enums = require("core.Enums")
 local Item = require("core.Item")
 local Map = require("core.Map")
 local Rand = require("core.Rand")
@@ -56,8 +56,8 @@ Each item of "drops" can have these properties.
     chara: character that was killed.
 --]]
 
-data.define_prototype("chara_drop")
-data.add(
+Data.define_prototype("chara_drop")
+Data.add(
    "core.chara_drop",
    {
       rich_person = {
@@ -150,7 +150,7 @@ data.add(
                                             {
                                                level = args.chara.level,
                                                flttypemajor = 92000,
-                                               quality = enums.Quality.GOOD,
+                                               quality = Enums.Quality.GOOD,
                                                nostack = true
                                             }
                      )

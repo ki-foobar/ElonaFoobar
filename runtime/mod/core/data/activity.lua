@@ -1,8 +1,8 @@
-local data = require("core.data")
+local Data = require("core.Data")
 
-data.define_prototype("activity")
+Data.define_prototype("activity")
 
-data.add(
+Data.add(
    "core.activity",
    {
       eat = {

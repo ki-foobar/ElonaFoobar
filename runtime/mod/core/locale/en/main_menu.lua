@@ -1,9 +1,8 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    main_menu = {
       title_menu = {
-         title = "Starting Menu",
          continue = "Restore an Adventurer",
          new = "Generate an Adventurer",
          incarnate = "Incarnate an Adventurer",

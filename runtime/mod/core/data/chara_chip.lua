@@ -1,7 +1,7 @@
-local data = require("core.data")
+local Data = require("core.Data")
 
-data.define_prototype("chara_chip")
-data.add(
+Data.define_prototype("chara_chip")
+Data.add(
    "core.chara_chip",
    {
       _0 = {

@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    win = {
       conquer_lesimas = "Unbelievable! You conquered Lesimas!",
       you_acquired_codex = "Blessing to {$2}, {$1}! You've finally acquired the codex!",

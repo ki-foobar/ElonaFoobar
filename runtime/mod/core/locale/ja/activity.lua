@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add_data_text(
+I18N.add_data_text(
    "core.activity",
    {
       eat = {
@@ -74,7 +74,7 @@ i18n.add_data_text(
    }
 )
 
-i18n.add {
+I18N.add {
    activity = {
       cancel = {
          item = "{name($1)}は行動を中断した。",

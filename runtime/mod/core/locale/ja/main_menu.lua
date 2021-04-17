@@ -1,9 +1,8 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    main_menu = {
       title_menu = {
-         title = "冒険の道標",
          continue = "冒険を再開する",
          new = "新しい冒険者を作成する",
          incarnate = "冒険者の引継ぎ",

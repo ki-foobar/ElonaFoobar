@@ -1,4 +1,4 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 local Rand = require("core.Rand")
 
 local marks = { "。", "？", "！", "" }
@@ -666,7 +666,7 @@ local endings = {
 }
 
 for name, list in pairs(endings) do
-   i18n.add_function {
+   I18N.add_function {
       [name] = function(chara, mark)
          -- Lua tables are 1-indexed.
          if mark == nil then

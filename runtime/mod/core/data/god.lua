@@ -1,7 +1,7 @@
-local data = require("core.data")
+local Data = require("core.Data")
 
-data.define_prototype("god")
-data.add(
+Data.define_prototype("god")
+Data.add(
    "core.god",
    {
       mani = {

@@ -1,9 +1,9 @@
-local data = require("core.data")
+local Data = require("core.Data")
 
 local unique = require_relative("dialog/unique.lua")
 
-data.define_prototype("dialog")
-data.add(
+Data.define_prototype("dialog")
+Data.add(
    "core.dialog",
    {
       ignored = {
@@ -18,4 +18,4 @@ data.add(
       },
    }
 )
-data.add("core.dialog", unique)
+Data.add("core.dialog", unique)

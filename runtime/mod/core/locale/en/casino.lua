@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    casino = {
       talk_to_dealer = "You talk to the dealer.",
       can_acquire = "There're some items you can acquire.",

@@ -1,7 +1,7 @@
-local data = require("core.data")
+local Data = require("core.Data")
 
-data.define_prototype("event")
-data.add(
+Data.define_prototype("event")
+Data.add(
    "core.event",
    {
       game_initialized = {},

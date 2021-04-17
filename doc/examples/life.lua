@@ -1,5 +1,5 @@
 local Map = require("core.Map")
-local enums = require("core.enums")
+local Enums = require("core.Enums")
 local Event = require("core.Event")
 local Rand = require("core.Rand")
 
@@ -59,9 +59,9 @@ local function run_life()
          for x = 1, Map.height() do
             local tile
             if Store.map.grid[x][y] == 1 and not Map.is_blocked(x, y) then
-               tile = Map.generate_tile(enums.TileKind.Wall)
+               tile = Map.generate_tile(Enums.TileKind.Wall)
             else
-               tile = Map.generate_tile(enums.TileKind.Room)
+               tile = Map.generate_tile(Enums.TileKind.Room)
             end
             Map.set_tile(x, y, tile)
             Map.set_memory(x, y, tile)

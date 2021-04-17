@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    quest = {
       journal_updated = "ジャーナルが更新された。",
       minutes_left = "クエスト[残り{$1}分]",

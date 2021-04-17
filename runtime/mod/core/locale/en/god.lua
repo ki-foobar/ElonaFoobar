@@ -1,8 +1,8 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
 -- NOTE: Will change drastically with the introduction of custom gods.
 
-i18n.add {
+I18N.add {
    god = {
       eyth_name = "Eyth of Infidel",
       indifferent = " Your God becomes indifferent to your gift.",
@@ -51,7 +51,7 @@ i18n.add {
 
 
 
-i18n.add_data_text(
+I18N.add_data_text(
    "core.god",
    {
       mani = {

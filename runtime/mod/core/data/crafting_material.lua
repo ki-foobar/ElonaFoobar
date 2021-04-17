@@ -1,7 +1,7 @@
-local data = require("core.data")
+local Data = require("core.Data")
 
-data.define_prototype("crafting_material")
-data.add(
+Data.define_prototype("crafting_material")
+Data.add(
    "core.crafting_material",
    {
       garbage = {

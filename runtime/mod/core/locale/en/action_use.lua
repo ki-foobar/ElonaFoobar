@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    action = {
       use = {
          useable_again_at = "This item will be useable again at {$1}.",

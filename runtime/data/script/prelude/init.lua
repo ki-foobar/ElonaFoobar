@@ -1,43 +1,43 @@
-local prelude = {}
+local exports = {}
 
 
 -- Prelude libraries which are exposed to each mod environment.
 
 
 -- Lua standard libraries
-prelude.assert = assert
-prelude.error = error
-prelude.ipairs = ipairs
-prelude.next = next
-prelude.pairs = pairs
-prelude.pcall = pcall
-prelude.print = print
-prelude.select = select
-prelude.tonumber = tonumber
-prelude.tostring = tostring
-prelude.type = type
-prelude.xpcall = xpcall
+exports.assert = assert
+exports.error = error
+exports.ipairs = ipairs
+exports.next = next
+exports.pairs = pairs
+exports.pcall = pcall
+exports.print = print
+exports.select = select
+exports.tonumber = tonumber
+exports.tostring = tostring
+exports.type = type
+exports.xpcall = xpcall
 
-prelude.coroutine = require("prelude.coroutine_ext")
-prelude.math = require("prelude.math_ext")
-prelude.string = require("prelude.string_ext")
-prelude.table = require("prelude.table_ext")
-prelude.utf8 = require("prelude.utf8_ext")
+exports.coroutine = require("prelude.coroutine_ext")
+exports.math = require("prelude.math_ext")
+exports.string = require("prelude.string_ext")
+exports.table = require("prelude.table_ext")
+exports.utf8 = require("prelude.utf8_ext")
 
 
 -- Additional libraries
-prelude.inspect = require("prelude.inspect")
-prelude.fun = require("prelude.luafun.fun")
+exports.inspect = require("prelude.inspect")
+exports.fun = require("prelude.luafun.fun")
 
 
 
 -- Miscellaneous
 
 local pairs, print, type, setmetatable, deepcopy, mathtype, inspect =
-   prelude.pairs, prelude.print, prelude.type, _ENV.setmetatable, prelude.table.deepcopy, prelude.math.type, prelude.inspect
+   exports.pairs, exports.print, exports.type, _ENV.setmetatable, exports.table.deepcopy, exports.math.type, exports.inspect
 
 
-function prelude.class(name, Super)
+function exports.class(name, Super)
    local Class
    if Super then
       Class = deepcopy(Super)
@@ -61,7 +61,7 @@ function prelude.class(name, Super)
 end
 
 
-function prelude.xtype(v)
+function exports.xtype(v)
    local ty = type(v)
    if ty == "number" then
       return mathtype(v)
@@ -77,9 +77,19 @@ function prelude.xtype(v)
 end
 
 
-function prelude.p(...)
+function exports.p(...)
    print(inspect(...))
 end
 
 
-return prelude
+-- Inject prelude into `env`.
+function exports.import(env)
+   for k, v in pairs(exports) do
+      if k ~= "import" then
+         env[k] = v
+      end
+   end
+end
+
+
+return exports

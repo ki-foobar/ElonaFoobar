@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    talk = {
       visitor = {
          wanted_to_say_hi = "I just wanted to say hi.",

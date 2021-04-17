@@ -1,6 +1,6 @@
-local i18n = require("core.i18n")
+local I18N = require("core.I18N")
 
-i18n.add {
+I18N.add {
    wish = {
       what_do_you_wish_for = "What do you wish for? ",
       your_wish = "\"{$1}!!\"",

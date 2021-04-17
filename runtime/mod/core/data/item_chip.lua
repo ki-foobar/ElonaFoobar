@@ -1,7 +1,7 @@
-local data = require("core.data")
+local Data = require("core.Data")
 
-data.define_prototype("item_chip")
-data.add(
+Data.define_prototype("item_chip")
+Data.add(
    "core.item_chip",
    {
       empty = {
